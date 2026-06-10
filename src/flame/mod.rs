@@ -170,6 +170,9 @@ impl Screensaver for Flame {
 
         // 3. Update logo temperature
         for cell in &mut self.logo_cells {
+            if cell.x >= cols || cell.y >= rows {
+                continue;
+            }
             let mut column_heat = 0.0;
             let check_depth = 12;
             for dy in 1..=check_depth {

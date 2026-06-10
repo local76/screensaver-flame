@@ -69,7 +69,7 @@ pub fn step_fire(flame: &mut Flame, cols: usize, rows: usize) {
     }
 
     // Occasional large fire plumes
-    if flame.rng.next_bool(0.12) {
+    if rows >= 3 && flame.rng.next_bool(0.12) {
         let flare_width = flame.rng.next_range(3.0, 8.0) as usize;
         let flare_x = flame.rng.next_usize(cols.saturating_sub(flare_width));
         let bottom_row = rows - 1;
@@ -352,6 +352,9 @@ pub fn draw_fire(effect: &Flame, grid: &mut [TerminalCell], cols: usize, rows: u
 
     // 4. Draw logo cells (styled with Windows Theme Accent color)
     for cell in &effect.logo_cells {
+        if cell.x >= cols || cell.y >= rows {
+            continue;
+        }
         let grid_idx = cell.y * cols + cell.x;
         let temp = cell.temp.min(1.0);
 
