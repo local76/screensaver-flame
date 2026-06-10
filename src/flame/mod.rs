@@ -8,8 +8,6 @@ use library::core::screensaver::Screensaver;
 use library::core::logo_block::render_logo_block;
 use library::platform::native::sys_info::get_system_info;
 use library::toolkit::sys_info::query_current_palette;
-use library::toolkit::rgb_controller::{RgbController, is_openrgb_enabled};
-use library::toolkit::rgb_protocol::RgbColor;
 
 mod types;
 mod physics;
@@ -37,7 +35,6 @@ pub struct Flame {
     pub(crate) mem_pressure: f32,
     pub(crate) cpu_load: f32,
     pub(crate) host_bias: f32,
-    pub(crate) rgb: Option<RgbController>,
 }
 
 impl Default for Flame {
@@ -84,7 +81,6 @@ impl Flame {
             mem_pressure,
             cpu_load,
             host_bias,
-            rgb: if is_openrgb_enabled() { Some(RgbController::new()) } else { None },
         }
     }
 }
@@ -366,10 +362,7 @@ impl Screensaver for Flame {
                 }
             }
 
-            if let Some(ref r) = self.rgb {
-                r.flash(RgbColor::new(255, 80, 20), std::time::Duration::from_millis(120));
-            }
-        }
+}
         self.volcanic_globs.retain(|g| g.life > 0.0 && g.x >= 0.0 && g.x < cols as f32 && g.y < rows as f32);
     }
 
