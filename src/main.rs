@@ -3,10 +3,9 @@
     windows_subsystem = "windows"
 )]
 
-mod runner;
 mod flame;
 
 fn main() {
     let effect = flame::Flame::new();
-    runner::run_main(effect, "flame");
+    library::screensaver_runner::run_main(effect, "flame");
 }
