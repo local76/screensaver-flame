@@ -10,46 +10,23 @@ name = "flame"
 path = "src/main.rs"
 
 [dependencies]
-library = { git = "https://github.com/local76/library.git", tag = "v2026.6.10-1", features = ["screensaver-runtime"] }
+libc = "0.2"
+
+[target.'cfg(windows)'.dependencies]
+windows-sys = { version = "0.59", features = [
+    "Win32_Foundation",
+    "Win32_System_Console",
+    "Win32_UI_Input_KeyboardAndMouse",
+    "Win32_UI_WindowsAndMessaging",
+    "Win32_Graphics_Gdi",
+    "Win32_Media",
+] }
 
 [build-dependencies]
-library = { git = "https://github.com/local76/library.git", tag = "v2026.6.10-1", features = ["screensaver-runtime"] }
 embed-resource = "2"
-
 [profile.release]
-opt-level = "z"
-lto = true
-codegen-units = 1
-strip = true
-panic = "abort"
-
-[package.metadata.deb]
-name = "scene-flame"
-maintainer = "Screensavers Developer <dev@local76.org>"
-extended-description = "Screensaver effect (flame) part of the screensavers collection."
-depends = "libc6, xterm"
-section = "utils"
-priority = "optional"
-assets = [
-    ["target/release/flame", "usr/libexec/local76/screensavers/flame", "755"],
-    ["assets/local76-flame.desktop", "usr/share/applications/local76-flame.desktop", "644"],
-    ["assets/local76-flame.xml", "usr/share/xscreensaver/config/local76-flame.xml", "644"],
-    ["assets/local76-flame.png", "usr/share/pixmaps/local76-flame.png", "644"]
-]
-
-[package.metadata.generate-rpm]
-name = "scene-flame"
-version = "2026.6.10-1"
-release = "1"
-arch = "x86_64"
-summary = "flame - retro terminal screensaver effect"
-description = "Screensaver effect (flame) part of the screensavers collection."
-license = "MIT"
-assets = [
-    { source = "target/release/flame", dest = "/usr/libexec/local76/screensavers/flame", mode = "755" },
-    { source = "assets/local76-flame.desktop", dest = "/usr/share/applications/local76-flame.desktop", mode = "644" },
-    { source = "assets/local76-flame.xml", dest = "/usr/share/xscreensaver/config/local76-flame.xml", mode = "644" },
-    { source = "assets/local76-flame.png", dest = "/usr/share/pixmaps/local76-flame.png", mode = "644" }
-]
-[patch."https://github.com/local76/library.git"]
-library = { path = "../library" }
+opt-level = "z"          # Optimize for size
+lto = true               # Enable Link Time Optimization
+codegen-units = 1        # Reduce codegen units to maximize size reduction
+panic = "abort"          # Remove panic unwinding code
+strip = true             # Strip symbols and debuginfo
